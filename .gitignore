@@ -1,0 +1,11 @@
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+src/test
+vsc-extension-quickstart.md
+package-lock.json
+.vscode
+.vscodeignore
+CHANGELOG.md
