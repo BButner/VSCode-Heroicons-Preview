@@ -1,19 +1,20 @@
 import * as vscode from 'vscode'
-import { decorateEditor, documentIsRegistered, registerDocument } from './decoration';
+import { documentIsRegistered, registerDocument, Decorator } from './decoration';
 import { IconHandler } from './icon';
 
 export class Events {
 	private timeout: NodeJS.Timeout | null = null
 	private iconHandler: IconHandler
+	private decorator: Decorator
 
 	constructor (iconHandler: IconHandler) {
 		this.iconHandler = iconHandler
-
+		this.decorator = new Decorator(iconHandler)
 		this.init()
 	}
 
 	private init = (): void => {
-		vscode.workspace.onDidChangeTextDocument(this.changed)
+		// vscode.workspace.onDidChangeTextDocument(this.changed)
 		vscode.workspace.onDidOpenTextDocument(this.opened)
 	}
 
@@ -26,30 +27,28 @@ export class Events {
 			registerDocument(cleanedDocumentName)
 		}
 
-		// decorateEditor(cleanedDocumentName)
-
 		const potentialEditor: vscode.TextEditor[] = vscode.window.visibleTextEditors.filter(editor => editor.document.fileName === cleanedDocumentName)
 
 		if (potentialEditor.length > 0) {
 			if (new RegExp(this.iconHandler.getIconNames().join('|')).test(potentialEditor[0].document.getText())) {
-				// we now need to decorate
+				this.decorator.decorateEditor(cleanedDocumentName)
 			}
 		}
 	}
 
-	private changed = (changeEvent: vscode.TextDocumentChangeEvent): void => {
-		if (this.timeout) clearTimeout(this.timeout)
+	// private changed = (changeEvent: vscode.TextDocumentChangeEvent): void => {
+	// 	if (this.timeout) clearTimeout(this.timeout)
 
-		this.timeout = setTimeout(() => {
-			console.log('timeout fired')
+	// 	this.timeout = setTimeout(() => {
+	// 		console.log('timeout fired')
 
-			if (!documentIsRegistered(changeEvent.document.fileName)) {
-				registerDocument(changeEvent.document.fileName)
-			}
+	// 		if (!documentIsRegistered(changeEvent.document.fileName)) {
+	// 			registerDocument(changeEvent.document.fileName)
+	// 		}
 		
-			decorateEditor(changeEvent.document.fileName)
-		}, 500)
-	}
+	// 		decorateEditor(changeEvent.document.fileName)
+	// 	}, 500)
+	// }
 
 	private cleanFileName = (fileName: string): string => {
 		if (fileName.length > 5) {

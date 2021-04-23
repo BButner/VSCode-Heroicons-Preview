@@ -1,21 +1,17 @@
 import * as vscode from 'vscode'
+import { IconHandler } from './icon'
 
-interface DocumentDecorationType {
-  documentName: string;
-  decorationType: vscode.TextEditorDecorationType;
-}
-
-const defaultDecorationType = vscode.window.createTextEditorDecorationType({
+const defaultDecorationType: vscode.TextEditorDecorationType = vscode.window.createTextEditorDecorationType({
   before: {
-		margin: '.1em',
-		height: '1em',
-		width: '1em',
-	}
+    margin: '.1em',
+    height: '1rem',
+    width: '1rem',
+  }
 })
 
-const svg: string = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white"><path transform-origin="12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>`
-
 const documentDecorationTypes: DocumentDecorationType[] = []
+
+const svg: string = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white"><path transform-origin="12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>`
 
 export const documentIsRegistered = (documentName: string): boolean => {
   return documentDecorationTypes.map(type => type.documentName).includes(documentName)
@@ -32,46 +28,84 @@ export const getDocumentDecorationTypeByName = (documentName: string): vscode.Te
   return documentDecorationTypes.filter(type => type.documentName === documentName)[0].decorationType
 }
 
-export const decorateEditor = (documentName: string): void => {
-  const visibleEditors: vscode.TextEditor[] = vscode.window.visibleTextEditors
-  const potentialEditor: vscode.TextEditor[] = visibleEditors.filter(editor => editor.document.fileName === documentName)
+interface DocumentDecorationType {
+  documentName: string;
+  decorationType: vscode.TextEditorDecorationType;
+}
 
-  let decorationsArray = []
-  
-  if (visibleEditors.length > 0 && potentialEditor.length > 0) {
-    const editor: vscode.TextEditor = potentialEditor[0]
-    const documentText: string | undefined = editor.document.getText()
+export class Decorator {
+  private iconHandler: IconHandler
 
-    if (documentText) {
-      const editorLines: string[] = documentText.split('\n')
-		  const regex: RegExp = /ChevronDownIcon/
+  constructor (iconHandler: IconHandler) {
+    this.iconHandler = iconHandler
+  }
 
-      for (let line = 0; line < editorLines.length; line++) {
-        let match: RegExpMatchArray | null = editorLines[line].match(regex)
-  
-        if (match !== null && match.index !== undefined) {
-          let range: vscode.Range = new vscode.Range(
-            new vscode.Position(line, match.index + match[0].length),
-            new vscode.Position(line, match.index + match[0].length)
-          )
-  
-          decorationsArray.push({
-            range,
-            renderOptions: {
-              before: {
-                contentIconPath: vscode.Uri.parse(
-                  `data:image/svg+xml;utf8,${encodeURI(svg)}`
-                )	
+  decorateEditor = (documentName: string): void => {
+    const visibleEditors: vscode.TextEditor[] = vscode.window.visibleTextEditors
+    const potentialEditor: vscode.TextEditor[] = visibleEditors.filter(editor => editor.document.fileName === documentName)
+
+    let decorationsArray: any[] = []
+    
+    if (visibleEditors.length > 0 && potentialEditor.length > 0) {
+      const editor: vscode.TextEditor = potentialEditor[0]
+      const documentText: string | undefined = editor.document.getText()
+
+      if (documentText) {
+        const editorLines: string[] = documentText.split('\n')
+        const lineTest: RegExp = new RegExp(this.iconHandler.getIconNames().join('|'))
+
+        for (let line = 0; line < editorLines.length; line++) {
+          const foundIcons: string[] = [] // There could be multiple Icons on a single line
+          // We find the line that has the Icon Text
+          if (lineTest.test(editorLines[line])) {
+            const words = editorLines[line].split(' ')
+
+            this.iconHandler.getIconNames().some(
+              (icon) => {
+                if (words.filter(word => word.includes(icon)).length > 0) {
+                  foundIcons.push(icon)
+                }
               }
-            }
-          })
+            )
+          }
+
+          if (foundIcons.length > 0) {
+            foundIcons.forEach(icon => {
+              const match: RegExpMatchArray | null = editorLines[line].match(new RegExp(icon))
+
+              if (match !== null && match.index !== undefined) {
+                const range: vscode.Range = new vscode.Range(
+                  new vscode.Position(line, match.index + match[0].length),
+                  new vscode.Position(line, match.index + match[0].length)
+                )
+
+                this.iconHandler.getIconData(icon)
+
+                decorationsArray.push({
+                  range,
+                  renderOptions: {
+                    before: {
+                      contentIconPath: vscode.Uri.parse(
+                        `data:image/svg+xml;utf8,${encodeURI(
+                          this.iconHandler.getIconData(icon)
+                        )}`
+                      )	
+                    }
+                  }
+                })
+                console.log('pushed')
+              }
+            })
+          }
+        }
+
+        if (decorationsArray.length > 0) {
+          editor.setDecorations(
+            getDocumentDecorationTypeByName(editor.document.fileName),
+            decorationsArray
+          )
         }
       }
     }
-
-    editor.setDecorations(
-      getDocumentDecorationTypeByName(editor.document.fileName),
-      decorationsArray
-    )
   }
 }

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { readdirSync, existsSync } from 'fs'
+import { readdirSync, existsSync, readFileSync } from 'fs'
 import { join } from 'path'
 
 export const detectHeroIcons = async (): Promise<string | null> => {
@@ -36,4 +36,14 @@ const findNodeModules = async (): Promise<string | null> => {
   }
 
   return nodeModuleLocation
+}
+
+export const getFileDataFromIconName = (iconFileLocation: string): string | null => {
+  let iconData: string | null = null
+
+  try {
+    iconData = readFileSync(iconFileLocation, 'utf8')
+  } catch (ex) {}
+
+  return iconData
 }
