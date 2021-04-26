@@ -22,8 +22,8 @@ export class IconHandler {
   private iconNames: string[] = []
   private heroIconsLocation: string
   private mode: 'vue' | 'react' | null = null
-  private pathRegEx = /React\.createElement\("path",.*?{(.*?)}\)/s
-  private pathPropertiesRegEx = /.?(\S+):.?"(.+)"/g
+  private pathRegEx = /React\.createElement\("path",.*?{(.*?)}\)/gms
+  private pathPropertiesRegEx = /.?(\S+):.?"(.+)"/gm
 
   constructor (heroIconsLocation: string) {
     this.heroIconsLocation = heroIconsLocation
@@ -88,15 +88,14 @@ export class IconHandler {
 
     if (match) {
       match.forEach(match => paths.push(
-        '<path ' + this.cleanPathProperties(match) + '>'
+        '<path ' + this.cleanPathProperties(match) + ' />'
       ))
     }
 
-    return this.getSVGString(iconStyle) + paths.join('') + '</path>'.repeat(paths.length) + '</svg>'
+    return this.getSVGString(iconStyle) + paths.join('') + '</svg>'
   }
 
   private getSVGString = (iconStyle: IconStyleType): string => {
-    // const svgS: string = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" stroke="white">'
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" ' + (iconStyle === IconStyleType.solid ?
       'fill="white"' : 'fill="none" stroke="white"') // TODO Configuration options for Fill and Stroke colors
       + '>'
@@ -104,7 +103,7 @@ export class IconHandler {
 
   private cleanPathProperties = (path: string): string => {
     const cleanedProperties: string[] = []
-    const match: Array<string[]> = [...path.matchAll(this.pathPropertiesRegEx)] // This is where the issue lies
+    const match: Array<string[]> = [...path.matchAll(this.pathPropertiesRegEx)]
 
     if (match.length > 0) {
       const props: string[] = match.map(m => m[0].trim())
