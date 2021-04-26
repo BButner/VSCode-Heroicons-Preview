@@ -2,6 +2,7 @@ import { readdirSync } from 'fs'
 import { join } from 'path'
 import { getFileDataFromIconName } from './file'
 import { IconStyleType } from './detection'
+import { ConfigurationOption, getConfigurationValue } from './configuration'
 
 const cleanedVariables: Record<string, string> = {
    'fillRule': 'fill-rule',
@@ -102,8 +103,10 @@ export class IconHandler {
   }
 
   private getSVGString = (iconStyle: IconStyleType): string => {
+    const color: string = getConfigurationValue(ConfigurationOption.iconColor)! // Force string because it will return the custom value, OR the default value
+
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ' + (iconStyle === IconStyleType.solid ?
-      'fill="white"' : 'fill="none" stroke="white"') // TODO Configuration options for Fill and Stroke colors
+      `fill="${color}"`.replace('#', '%23') : `fill="none" stroke="${color}"`.replace('#', '%23')) // TODO Configuration options for Fill and Stroke colors
       + '>'
   }
 

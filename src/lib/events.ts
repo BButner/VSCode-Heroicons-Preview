@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import { ConfigurationOption, getConfigurationValue } from './configuration';
 import { documentIsRegistered, registerDocument, Decorator } from './decoration';
 import { IconHandler } from './icon';
 

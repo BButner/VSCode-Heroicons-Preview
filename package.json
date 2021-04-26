@@ -19,7 +19,17 @@
         "command": "heroicons-preview.hipTest",
         "title": "hiptest"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Heroicons Preview",
+      "properties": {
+        "hip.iconColor": {
+          "type": "string",
+          "default": "white",
+          "description": "Color to render your Icons. Accepts anything that a \"fill\" attribute would accept in HTML."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

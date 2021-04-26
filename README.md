@@ -20,4 +20,4 @@ For instance, lets say Heroicons v1.2 adds a "CuteCatIcon". If you open up a pro
   - For instance, if you have `import { ChevronUpIcon } from '@heroicons/react/solid'` it will render the Solid variant, else it will render whatever the fallback style is. (Default: Outline)
 - [x] React and Vue library support
 - [ ] Configuration options for `node_modules` locations
-- [ ] Configure Icon color
+- [x] Configure Icon color
