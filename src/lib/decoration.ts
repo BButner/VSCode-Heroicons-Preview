@@ -3,15 +3,12 @@ import { IconHandler } from './icon'
 
 const defaultDecorationType: vscode.TextEditorDecorationType = vscode.window.createTextEditorDecorationType({
   before: {
-    margin: '.1em',
-    height: '1rem',
-    width: '1rem',
+    height: '0.8rem',
+    width: '0.8rem'
   }
 })
 
 const documentDecorationTypes: DocumentDecorationType[] = []
-
-const svg: string = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white"><path transform-origin="12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>`
 
 export const documentIsRegistered = (documentName: string): boolean => {
   return documentDecorationTypes.map(type => type.documentName).includes(documentName)
@@ -93,7 +90,6 @@ export class Decorator {
                     }
                   }
                 })
-                console.log('pushed')
               }
             })
           }

@@ -15,7 +15,7 @@ interface IconCacheEntry {
   iconData: string;
 }
 
-const svgString: string = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" stroke="white">'
+const svgString: string = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" stroke="white">'
 
 export class IconHandler {
   private iconCache: IconCacheEntry[] = []
@@ -50,7 +50,7 @@ export class IconHandler {
 
   private populateAvailableIconNames = (): void => {
     this.iconNames = readdirSync(this.getIconPath())
-      .filter(name => name.substring(name.length - 3, name.length) === '.js')
+      .filter(name => name.substring(name.length - 3, name.length) === '.js' && !name.includes('index'))
       .map(name => name.replace('.js', ''))
   }
 

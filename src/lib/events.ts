@@ -14,7 +14,7 @@ export class Events {
 	}
 
 	private init = (): void => {
-		// vscode.workspace.onDidChangeTextDocument(this.changed)
+		vscode.workspace.onDidChangeTextDocument(this.changed)
 		vscode.workspace.onDidOpenTextDocument(this.opened)
 	}
 
@@ -36,19 +36,17 @@ export class Events {
 		}
 	}
 
-	// private changed = (changeEvent: vscode.TextDocumentChangeEvent): void => {
-	// 	if (this.timeout) clearTimeout(this.timeout)
+	private changed = (changeEvent: vscode.TextDocumentChangeEvent): void => {
+		if (this.timeout) clearTimeout(this.timeout)
 
-	// 	this.timeout = setTimeout(() => {
-	// 		console.log('timeout fired')
-
-	// 		if (!documentIsRegistered(changeEvent.document.fileName)) {
-	// 			registerDocument(changeEvent.document.fileName)
-	// 		}
+		this.timeout = setTimeout(() => {
+			if (!documentIsRegistered(changeEvent.document.fileName)) {
+				registerDocument(changeEvent.document.fileName)
+			}
 		
-	// 		decorateEditor(changeEvent.document.fileName)
-	// 	}, 500)
-	// }
+			this.decorator.decorateEditor(changeEvent.document.fileName)
+		}, 500)
+	}
 
 	private cleanFileName = (fileName: string): string => {
 		if (fileName.length > 5) {
