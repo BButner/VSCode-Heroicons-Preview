@@ -17,6 +17,27 @@ export class Events {
 	private init = (): void => {
 		vscode.workspace.onDidChangeTextDocument(this.changed)
 		vscode.workspace.onDidOpenTextDocument(this.opened)
+		vscode.workspace.onDidChangeConfiguration(this.configChanged)
+	}
+
+	private configChanged = () =>{
+		const editors: vscode.TextEditor[] = vscode.window.visibleTextEditors
+
+		console.log('config changed')
+
+		editors.forEach(editor => {
+			if (editor.document && editor.document.getText()) {
+				const cleanedDocumentName: string = this.cleanFileName(editor.document.fileName)
+
+				if (!documentIsRegistered(cleanedDocumentName)) {
+					registerDocument(cleanedDocumentName)
+				}
+
+				if (new RegExp(this.iconHandler.getIconNames().join('|')).test(editor.document.getText())) {
+					this.decorator.decorateEditor(cleanedDocumentName)
+				}
+			}
+		})
 	}
 
 	private opened = (openedDocument: vscode.TextDocument) => {
