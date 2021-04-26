@@ -1,6 +1,7 @@
 import { readdirSync } from 'fs'
 import { join } from 'path'
 import { getFileDataFromIconName } from './file'
+import { IconStyleType } from './detection'
 
 const cleanedVariables: Record<string, string> = {
    'fillRule': 'fill-rule',
@@ -13,9 +14,8 @@ const cleanedVariables: Record<string, string> = {
 interface IconCacheEntry {
   iconName: string;
   iconData: string;
+  iconStyle: IconStyleType;
 }
-
-const svgString: string = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" stroke="white">'
 
 export class IconHandler {
   private iconCache: IconCacheEntry[] = []
@@ -40,24 +40,24 @@ export class IconHandler {
     this.populateAvailableIconNames()
   }
 
-  getIconData = (iconName: string): string => {
-    if (!this.isIconCached(iconName)) {
-      const iconData: string | null = getFileDataFromIconName(join(this.getIconPath() + '/' + iconName + '.js'))
+  getIconData = (iconName: string, iconStyle: IconStyleType): string => {
+    if (!this.isIconCached(iconName, iconStyle)) {
+      const iconData: string | null = getFileDataFromIconName(join(this.getIconPath(iconStyle) + '/' + iconName + '.js'))
 
       if (iconData) {
-        const serializedIconData: string = this.serializeIconFromData(iconData)
-        this.cacheIconData(iconName, serializedIconData)
+        const serializedIconData: string = this.serializeIconFromData(iconData, iconStyle)
+        this.cacheIconData(iconName, serializedIconData, iconStyle)
         return serializedIconData
       }
     } else {
-      return this.getIconDataFromCache(iconName)
+      return this.getIconDataFromCache(iconName, iconStyle)
     }
 
     return ''
   }
 
   private populateAvailableIconNames = (): void => {
-    this.iconNames = readdirSync(this.getIconPath())
+    this.iconNames = readdirSync(this.getIconPath(IconStyleType.outline))
       .filter(name => name.substring(name.length - 3, name.length) === '.js' && !name.includes('index'))
       .map(name => name.replace('.js', ''))
   }
@@ -66,25 +66,23 @@ export class IconHandler {
     return this.iconNames
   }
 
-  private getIconPath = (): string => {
-    return join(this.heroIconsLocation + '/' + this.mode + '/outline')
+  private getIconPath = (iconStyle: string): string => {
+    return join(this.heroIconsLocation + '/' + this.mode + '/' + iconStyle)
   }
 
-  private isIconCached = (iconName: string): boolean => {
-    return this.iconCache.filter(icon => icon.iconName === iconName).length !== 0
+  private isIconCached = (iconName: string, iconStyle: IconStyleType): boolean => {
+    return this.iconCache.filter(icon => icon.iconName === iconName && icon.iconStyle === iconStyle).length !== 0
   }
 
-  private cacheIconData = (iconName: string, iconData: string): void => {
-    console.log('Icon Cached: ', iconName)
-    this.iconCache.push({ iconName, iconData })
+  private cacheIconData = (iconName: string, iconData: string, iconStyle: IconStyleType): void => {
+    this.iconCache.push({ iconName, iconData, iconStyle })
   }
 
-  private getIconDataFromCache = (iconName: string): string => {
-    console.log('Icon retrieved from Cache: ', iconName)
-    return this.iconCache.filter(icon => icon.iconName === iconName)[0].iconData
+  private getIconDataFromCache = (iconName: string, iconStyle: IconStyleType): string => {
+    return this.iconCache.filter(icon => icon.iconName === iconName && icon.iconStyle === iconStyle)[0].iconData
   }
 
-  private serializeIconFromData = (iconFileData: string): string => {
+  private serializeIconFromData = (iconFileData: string, iconStyle: IconStyleType): string => {
     const paths: string[] = []
     const match: RegExpMatchArray | null = iconFileData.match(this.pathRegEx)
 
@@ -94,7 +92,14 @@ export class IconHandler {
       ))
     }
 
-    return svgString + paths.join('') + '</path>'.repeat(paths.length) + '</svg>'
+    return this.getSVGString(iconStyle) + paths.join('') + '</path>'.repeat(paths.length) + '</svg>'
+  }
+
+  private getSVGString = (iconStyle: IconStyleType): string => {
+    // const svgS: string = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 22 22" stroke="white">'
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" ' + (iconStyle === IconStyleType.solid ?
+      'fill="white"' : 'fill="none" stroke="white"') // TODO Configuration options for Fill and Stroke colors
+      + '>'
   }
 
   private cleanPathProperties = (path: string): string => {

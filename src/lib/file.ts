@@ -42,7 +42,6 @@ export const getFileDataFromIconName = (iconFileLocation: string): string | null
   let iconData: string | null = null
 
   try {
-    console.log('Disk hit')
     iconData = readFileSync(iconFileLocation, 'utf8')
   } catch (ex) {}
 

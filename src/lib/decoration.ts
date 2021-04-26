@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import { detectIconStyle } from './detection'
 import { IconHandler } from './icon'
 
 const defaultDecorationType: vscode.TextEditorDecorationType = vscode.window.createTextEditorDecorationType({
@@ -76,15 +77,13 @@ export class Decorator {
                   new vscode.Position(line, match.index + match[0].length)
                 )
 
-                this.iconHandler.getIconData(icon)
-
                 decorationsArray.push({
                   range,
                   renderOptions: {
                     before: {
                       contentIconPath: vscode.Uri.parse(
                         `data:image/svg+xml;utf8,${encodeURI(
-                          this.iconHandler.getIconData(icon)
+                          this.iconHandler.getIconData(icon, detectIconStyle(documentText, icon))
                         )}`
                       )	
                     }
