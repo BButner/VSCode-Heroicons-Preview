@@ -1,18 +1,51 @@
 import * as vscode from 'vscode'
 import { readdirSync, existsSync, readFileSync, lstatSync } from 'fs'
 import { join } from 'path'
+import { ConfigurationOption, getConfigurationValue } from './configuration'
 
 export const detectHeroIcons = async (): Promise<string | null> => {
   const nodeModules: string[] = await findNodeModules()
 
   let location: string | null = null
 
-  console.log(nodeModules)
-
   if (nodeModules.length > 0) {
     nodeModules.forEach(dir => {
       if (searchDirForHeroicons(dir)) location = join(dir, '@heroicons')
     })
+  }
+
+  if (!location) {
+    const nodeConfigurationOption: string | null | undefined = getConfigurationValue(ConfigurationOption.nodeModulesPath)
+
+    console.log('nodeConfigurationOption', nodeConfigurationOption)
+
+    if (nodeConfigurationOption) {
+      const topLevelDirs: ReadonlyArray<vscode.WorkspaceFolder> | undefined = vscode.workspace.workspaceFolders
+
+      if (topLevelDirs) {
+        const topLevelDir: string = topLevelDirs[0].uri.fsPath // rootPath is deprecated
+        console.log(topLevelDirs)
+  
+        const customNodeLocation: string = join(topLevelDir, nodeConfigurationOption)
+
+        if (existsSync(customNodeLocation)) {
+          if (customNodeLocation.includes('node_modules')) {
+            // Path is directly to node_modules
+            if (searchDirForHeroicons(customNodeLocation)) location = join(customNodeLocation, '@heroicons')
+            else vscode.window.showErrorMessage('Could not find @heroicons in specified node_modules1. Specified path: ' + customNodeLocation)
+          } else {
+            if (searchDirForNodeModules(customNodeLocation)) {
+              // Path contains node_modules directory
+              if (searchDirForHeroicons(join(customNodeLocation, 'node_modules'))) location = join(customNodeLocation, 'node_modules', '@heroicons')
+              else vscode.window.showErrorMessage('Could not find @heroicons in specified node_modules2. Specified path: ' + customNodeLocation)
+            } else vscode.window.showErrorMessage('Could not find specified node_modules. Specified path: ' + customNodeLocation)
+          }
+        } else {
+          console.log('does not exist')
+          vscode.window.showErrorMessage('Could not find specified node_modules. Specified path: ' + customNodeLocation)
+        }
+      }
+    }
   }
 
   return location
@@ -55,6 +88,7 @@ const searchDirForNodeModules = (dirPath: string): boolean => {
 }
 
 const searchDirForHeroicons = (dirPath: string): boolean => {
+  console.log('Searching Dir for Heroicons:', dirPath)
   return readdirSync(dirPath).filter(dir => dir === '@heroicons').length > 0
 }
 

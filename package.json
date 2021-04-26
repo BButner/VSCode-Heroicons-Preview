@@ -27,6 +27,11 @@
           "type": "string",
           "default": "white",
           "description": "Color to render your Icons. Accepts anything that a \"fill\" attribute would accept in HTML."
+        },
+        "hip.nodeModulesPath": {
+          "type": "string",
+          "default": null,
+          "description": "Specify a per-workspace node_modules path, relative to the top level directory. ex: \"/projecta/frontend/node_modules\""
         }
       }
     }

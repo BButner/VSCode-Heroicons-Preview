@@ -1,7 +1,8 @@
 import * as vscode from 'vscode'
 
 export enum ConfigurationOption {
-  iconColor = 'iconColor'
+  iconColor = 'iconColor',
+  nodeModulesPath = 'nodeModulesPath'
 }
 
 export const getConfigurationValue = (configOption: ConfigurationOption): string | null | undefined => {
