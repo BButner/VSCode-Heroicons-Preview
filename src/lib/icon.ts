@@ -17,12 +17,18 @@ interface IconCacheEntry {
   iconStyle: IconStyleType;
 }
 
+enum HeroiconsMode {
+  react = 'react',
+  vue = 'vue'
+}
+
 export class IconHandler {
   private iconCache: IconCacheEntry[] = []
   private iconNames: string[] = []
   private heroIconsLocation: string
-  private mode: 'vue' | 'react' | null = null
-  private pathRegEx = /React\.createElement\("path",.*?{(.*?)}\)/gms
+  private mode: HeroiconsMode | null = null
+  private pathRegExReact = /React\.createElement\("path",.*?{(.*?)}\)/gms
+  private pathRegExVue = /_createVNode\("path",.*?{(.*?)}\)/gms
   private pathPropertiesRegEx = /.?(\S+):.?"(.+)"/gm
 
   constructor (heroIconsLocation: string) {
@@ -33,9 +39,9 @@ export class IconHandler {
 
   private init (): void {
     if (readdirSync(this.heroIconsLocation)[0] === 'vue')
-      this.mode = 'vue'
+      this.mode = HeroiconsMode.vue
     else
-      this.mode = 'react'
+      this.mode = HeroiconsMode.react
 
     this.populateAvailableIconNames()
   }
@@ -84,13 +90,15 @@ export class IconHandler {
 
   private serializeIconFromData = (iconFileData: string, iconStyle: IconStyleType): string => {
     const paths: string[] = []
-    const match: RegExpMatchArray | null = iconFileData.match(this.pathRegEx)
+    const match: RegExpMatchArray | null = iconFileData.match(this.mode === HeroiconsMode.react ? this.pathRegExReact : this.pathRegExVue)
 
     if (match) {
       match.forEach(match => paths.push(
         '<path ' + this.cleanPathProperties(match) + ' />'
       ))
     }
+
+    console.log('paths', paths)
 
     return this.getSVGString(iconStyle) + paths.join('') + '</svg>'
   }
@@ -109,9 +117,11 @@ export class IconHandler {
       const props: string[] = match.map(m => m[0].trim())
 
       props.forEach(prop =>{
-        const propName: string = prop.split(':')[0] // Original Property name
+        const propName: string = prop.split(':')[0].replace(/"/g, '') // Original Property name
         const cleanedPropName: string | undefined = cleanedVariables[propName] // Cleaned Property name
-        let cleanedProperty: string = prop
+        let cleanedProperty: string = prop.replace(prop.split(':')[0], propName)
+
+        console.log(propName)
 
         if (cleanedPropName) cleanedProperty = cleanedProperty.replace(propName, cleanedPropName)
 
