@@ -6,12 +6,16 @@ Previews for Heroicons right alongside their definition, inline in your code!
 
 This project aims to recreate the [VSCode MaterialDesignIcons Intellisense](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense) by [@lukas-tr](https://github.com/lukas-tr). I personally use the aforementioned library when I'm working with Material Design Icons in my projects. I recently started using Heroicons, and couldn't find a similar extension in existence. VSCode Heroicons Preview is not as feature-rich as MDI Intellisense, however there are more planned features in the future!
 
-![Inline Preview](/img/inline_preview.png)
-
 ## 🧠 How does it work?
 The library will attempt to detect your `node_modules` folder and parse the data from the icons on an ad-hoc basis, then cache that data to lower the amount of disk reads during that session. This allows the extension to be independent of Heroicons updates, and prevent potential confusion.
 
 For instance, lets say Heroicons v1.2 adds a "CuteCatIcon". If you open up a project with a Heroicons version below 1.2, that icon will not be rendered, but if you open up a 1.2 version it will be rendered as it is detected. Why would it render an icon that isn't in the version you're using?
+
+### Inline Preview
+![Inline Preview](/img/inline_preview.png)
+
+### Typing Preview
+![Typing Preview](/img/typing_preview.gif)
 
 ## 🎨 Features
 - [x] Inline Icon Previews
