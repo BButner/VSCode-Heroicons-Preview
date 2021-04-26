@@ -54,10 +54,10 @@ export class IconHandler {
       if (iconData) {
         const serializedIconData: string = this.serializeIconFromData(iconData, iconStyle)
         this.cacheIconData(iconName, serializedIconData, iconStyle)
-        return serializedIconData
+        return this.getSVGString(iconStyle) + serializedIconData + '</svg>'
       }
     } else {
-      return this.getIconDataFromCache(iconName, iconStyle)
+      return this.getSVGString(iconStyle) + this.getIconDataFromCache(iconName, iconStyle) + '</svg>'
     }
 
     return ''
@@ -89,7 +89,7 @@ export class IconHandler {
     return this.iconCache.filter(icon => icon.iconName === iconName && icon.iconStyle === iconStyle)[0].iconData
   }
 
-  private serializeIconFromData = (iconFileData: string, iconStyle: IconStyleType): string => {
+  private serializeIconFromData = (iconFileData: string): string => {
     const paths: string[] = []
     const match: RegExpMatchArray | null = iconFileData.match(this.mode === HeroiconsMode.react ? this.pathRegExReact : this.pathRegExVue)
 
@@ -99,7 +99,7 @@ export class IconHandler {
       ))
     }
 
-    return this.getSVGString(iconStyle) + paths.join('') + '</svg>'
+    return paths.join('')
   }
 
   private getSVGString = (iconStyle: IconStyleType): string => {
