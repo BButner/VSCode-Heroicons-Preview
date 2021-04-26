@@ -97,9 +97,7 @@ export class IconHandler {
         '<path ' + this.cleanPathProperties(match) + ' />'
       ))
     }
-
-    console.log('paths', paths)
-
+    
     return this.getSVGString(iconStyle) + paths.join('') + '</svg>'
   }
 
@@ -120,8 +118,6 @@ export class IconHandler {
         const propName: string = prop.split(':')[0].replace(/"/g, '') // Original Property name
         const cleanedPropName: string | undefined = cleanedVariables[propName] // Cleaned Property name
         let cleanedProperty: string = prop.replace(prop.split(':')[0], propName)
-
-        console.log(propName)
 
         if (cleanedPropName) cleanedProperty = cleanedProperty.replace(propName, cleanedPropName)
 
