@@ -95,12 +95,10 @@ export class Decorator {
           }
         }
 
-        if (decorationsArray.length > 0) {
-          editor.setDecorations(
-            getDocumentDecorationTypeByName(editor.document.fileName),
-            decorationsArray
-          )
-        }
+        editor.setDecorations(
+          getDocumentDecorationTypeByName(editor.document.fileName),
+          decorationsArray
+        )
       }
     }
   }

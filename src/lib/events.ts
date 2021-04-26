@@ -19,6 +19,7 @@ export class Events {
 	}
 
 	private opened = (openedDocument: vscode.TextDocument) => {
+		console.log('Opened Event Fired')
 		const cleanedDocumentName: string = this.cleanFileName(openedDocument.fileName)
 
 		console.log(cleanedDocumentName)
@@ -37,6 +38,7 @@ export class Events {
 	}
 
 	private changed = (changeEvent: vscode.TextDocumentChangeEvent): void => {
+		console.log('Changed Event Fired')
 		if (this.timeout) clearTimeout(this.timeout)
 
 		this.timeout = setTimeout(() => {

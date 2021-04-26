@@ -41,9 +41,17 @@ export class IconHandler {
   }
 
   getIconData = (iconName: string): string => {
-    const iconData: string | null = getFileDataFromIconName(join(this.getIconPath() + '/' + iconName + '.js'))
+    if (!this.isIconCached(iconName)) {
+      const iconData: string | null = getFileDataFromIconName(join(this.getIconPath() + '/' + iconName + '.js'))
 
-    if (iconData) return this.serializeIconFromData(iconData)
+      if (iconData) {
+        const serializedIconData: string = this.serializeIconFromData(iconData)
+        this.cacheIconData(iconName, serializedIconData)
+        return serializedIconData
+      }
+    } else {
+      return this.getIconDataFromCache(iconName)
+    }
 
     return ''
   }
@@ -60,6 +68,20 @@ export class IconHandler {
 
   private getIconPath = (): string => {
     return join(this.heroIconsLocation + '/' + this.mode + '/outline')
+  }
+
+  private isIconCached = (iconName: string): boolean => {
+    return this.iconCache.filter(icon => icon.iconName === iconName).length !== 0
+  }
+
+  private cacheIconData = (iconName: string, iconData: string): void => {
+    console.log('Icon Cached: ', iconName)
+    this.iconCache.push({ iconName, iconData })
+  }
+
+  private getIconDataFromCache = (iconName: string): string => {
+    console.log('Icon retrieved from Cache: ', iconName)
+    return this.iconCache.filter(icon => icon.iconName === iconName)[0].iconData
   }
 
   private serializeIconFromData = (iconFileData: string): string => {
