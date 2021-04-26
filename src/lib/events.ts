@@ -23,8 +23,6 @@ export class Events {
 	private configChanged = () =>{
 		const editors: vscode.TextEditor[] = vscode.window.visibleTextEditors
 
-		console.log('config changed')
-
 		editors.forEach(editor => {
 			if (editor.document && editor.document.getText()) {
 				const cleanedDocumentName: string = this.cleanFileName(editor.document.fileName)
