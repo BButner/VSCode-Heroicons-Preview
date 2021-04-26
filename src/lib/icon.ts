@@ -52,7 +52,7 @@ export class IconHandler {
       const iconData: string | null = getFileDataFromIconName(join(this.getIconPath(iconStyle) + '/' + iconName + '.js'))
 
       if (iconData) {
-        const serializedIconData: string = this.serializeIconFromData(iconData, iconStyle)
+        const serializedIconData: string = this.serializeIconFromData(iconData)
         this.cacheIconData(iconName, serializedIconData, iconStyle)
         return this.getSVGString(iconStyle) + serializedIconData + '</svg>'
       }
