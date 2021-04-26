@@ -97,12 +97,12 @@ export class IconHandler {
         '<path ' + this.cleanPathProperties(match) + ' />'
       ))
     }
-    
+
     return this.getSVGString(iconStyle) + paths.join('') + '</svg>'
   }
 
   private getSVGString = (iconStyle: IconStyleType): string => {
-    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" ' + (iconStyle === IconStyleType.solid ?
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ' + (iconStyle === IconStyleType.solid ?
       'fill="white"' : 'fill="none" stroke="white"') // TODO Configuration options for Fill and Stroke colors
       + '>'
   }
