@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import { documentIsRegistered, registerDocument, Decorator } from './decoration';
+import { shouldFileBeDecorated } from './file';
 import { IconHandler } from './icon';
 
 export class Events {
@@ -17,14 +18,39 @@ export class Events {
 		vscode.workspace.onDidChangeTextDocument(this.changed)
 		vscode.workspace.onDidOpenTextDocument(this.opened)
 		vscode.workspace.onDidChangeConfiguration(this.configChanged)
+		vscode.window.onDidChangeActiveTextEditor(this.activeTextEditorChanged)
 	}
 
-	private configChanged = () =>{
+	private activeTextEditorChanged = (editor: vscode.TextEditor | undefined): void => {
+		if (editor) {
+			const cleanedDocumentName: string = this.cleanFileName(editor.document.fileName)
+
+			if (!shouldFileBeDecorated(cleanedDocumentName)) {
+				this.decorator.clearEditorDecorations(cleanedDocumentName)
+				return
+			}
+
+			if (!documentIsRegistered(cleanedDocumentName)) {
+				registerDocument(cleanedDocumentName)
+			}
+
+			if (new RegExp(this.iconHandler.getIconNames().join('|')).test(editor.document.getText())) {
+				this.decorator.decorateEditor(cleanedDocumentName)
+			}
+		}
+	}
+
+	private configChanged = () => {
 		const editors: vscode.TextEditor[] = vscode.window.visibleTextEditors
 
 		editors.forEach(editor => {
 			if (editor.document && editor.document.getText()) {
 				const cleanedDocumentName: string = this.cleanFileName(editor.document.fileName)
+
+				if (!shouldFileBeDecorated(cleanedDocumentName)) {
+					this.decorator.clearEditorDecorations(cleanedDocumentName)
+					return
+				}
 
 				if (!documentIsRegistered(cleanedDocumentName)) {
 					registerDocument(cleanedDocumentName)
@@ -37,10 +63,13 @@ export class Events {
 		})
 	}
 
-	private opened = (openedDocument: vscode.TextDocument) => {
+	private opened = (openedDocument: vscode.TextDocument): void => {
 		const cleanedDocumentName: string = this.cleanFileName(openedDocument.fileName)
 
-		console.log(cleanedDocumentName)
+		if (!shouldFileBeDecorated(cleanedDocumentName)) {
+			this.decorator.clearEditorDecorations(cleanedDocumentName)
+			return
+		}
 
 		if (!documentIsRegistered(cleanedDocumentName)) {
 			registerDocument(cleanedDocumentName)
@@ -59,6 +88,11 @@ export class Events {
 		if (this.timeout) clearTimeout(this.timeout)
 
 		this.timeout = setTimeout(() => {
+			if (!shouldFileBeDecorated(changeEvent.document.fileName)) {
+				this.decorator.clearEditorDecorations(changeEvent.document.fileName)
+				return
+			}
+
 			if (!documentIsRegistered(changeEvent.document.fileName)) {
 				registerDocument(changeEvent.document.fileName)
 			}

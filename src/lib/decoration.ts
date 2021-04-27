@@ -7,8 +7,8 @@ const defaultDecorationType: vscode.TextEditorDecorationType = vscode.window.cre
   rangeBehavior: vscode.DecorationRangeBehavior.ClosedOpen,
   before: {
     margin: '.1em',
-    height: getConfigurationValue(ConfigurationOption.iconSize)!,
-    width: getConfigurationValue(ConfigurationOption.iconSize)!
+    height: getConfigurationValue(ConfigurationOption.iconSize)!.toString(),
+    width: getConfigurationValue(ConfigurationOption.iconSize)!.toString()
   }
 })
 
@@ -39,6 +39,20 @@ export class Decorator {
 
   constructor (iconHandler: IconHandler) {
     this.iconHandler = iconHandler
+  }
+
+  clearEditorDecorations = (documentName: string): void => {
+    const visibleEditors: vscode.TextEditor[] = vscode.window.visibleTextEditors
+    const potentialEditor: vscode.TextEditor[] = visibleEditors.filter(editor => editor.document.fileName === documentName)
+
+    if (visibleEditors.length > 0 && potentialEditor.length > 0) {
+      const editor: vscode.TextEditor = potentialEditor[0]
+
+      editor.setDecorations(
+        getDocumentDecorationTypeByName(editor.document.fileName),
+        []
+      )
+    }
   }
 
   decorateEditor = (documentName: string): void => {

@@ -37,6 +37,11 @@
           "type": "string",
           "default": null,
           "description": "Specify a per-workspace node_modules path, relative to the top level directory. ex: \"/projecta/frontend/node_modules\""
+        },
+        "hip.fileDecorationExtensions": {
+          "type": "array",
+          "default": [".tsx", ".jsx", ".vue", ".html", ".svelte"],
+          "description": "Array of file extensions to search for Icons to decorate. Example: [\".tsx\", \".jsx\"]"
         }
       }
     }

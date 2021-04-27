@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
-import { readdirSync, existsSync, readFileSync, lstatSync } from 'fs'
-import { join } from 'path'
+import { readdirSync, existsSync, readFileSync, lstatSync, Stats } from 'fs'
+import { join, extname } from 'path'
 import { ConfigurationOption, getConfigurationValue } from './configuration'
 
 export const detectHeroIcons = async (): Promise<string | null> => {
@@ -15,7 +15,7 @@ export const detectHeroIcons = async (): Promise<string | null> => {
   }
 
   if (!location) {
-    const nodeConfigurationOption: string | null | undefined = getConfigurationValue(ConfigurationOption.nodeModulesPath)
+    const nodeConfigurationOption: string | null | undefined = getConfigurationValue(ConfigurationOption.nodeModulesPath)?.toString()
 
     if (nodeConfigurationOption) {
       const topLevelDirs: ReadonlyArray<vscode.WorkspaceFolder> | undefined = vscode.workspace.workspaceFolders
@@ -93,4 +93,11 @@ export const getFileDataFromIconName = (iconFileLocation: string): string | null
   } catch (ex) {}
 
   return iconData
+}
+
+export const shouldFileBeDecorated = (fileLocation: string): boolean => {
+  const validExtensions: string[] = getConfigurationValue(ConfigurationOption.fileDecorationExtensions) as string[]
+
+  if (validExtensions.includes('*')) return true
+  else return validExtensions.includes(extname(fileLocation))
 }
