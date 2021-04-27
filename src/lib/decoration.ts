@@ -6,6 +6,7 @@ import { IconHandler } from './icon'
 const defaultDecorationType: vscode.TextEditorDecorationType = vscode.window.createTextEditorDecorationType({
   rangeBehavior: vscode.DecorationRangeBehavior.ClosedOpen,
   before: {
+    margin: '.1em',
     height: getConfigurationValue(ConfigurationOption.iconSize)!,
     width: getConfigurationValue(ConfigurationOption.iconSize)!
   }
