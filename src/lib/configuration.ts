@@ -4,7 +4,8 @@ export enum ConfigurationOption {
   iconColor = 'iconColor',
   iconSize = 'iconSize',
   nodeModulesPath = 'nodeModulesPath',
-  fileDecorationExtensions = 'fileDecorationExtensions'
+  fileDecorationExtensions = 'fileDecorationExtensions',
+  iconStyleFallback = 'iconStyleFallback'
 }
 
 export const getConfigurationValue = (configOption: ConfigurationOption): string | string[] | null | undefined => {

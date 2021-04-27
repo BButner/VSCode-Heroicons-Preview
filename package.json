@@ -42,6 +42,12 @@
           "type": "array",
           "default": [".tsx", ".jsx", ".vue", ".html", ".svelte"],
           "description": "Array of file extensions to search for Icons to decorate. Example: [\".tsx\", \".jsx\"]"
+        },
+        "hip.iconStyleFallback": {
+          "type": "string",
+          "default": "outline",
+          "enum": ["solid", "outline"],
+          "description": "If HIP cannot detect a style from an import, it will fall back to this style."
         }
       }
     }
