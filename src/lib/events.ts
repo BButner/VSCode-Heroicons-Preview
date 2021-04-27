@@ -40,6 +40,8 @@ export class Events {
 	private opened = (openedDocument: vscode.TextDocument) => {
 		const cleanedDocumentName: string = this.cleanFileName(openedDocument.fileName)
 
+		console.log(cleanedDocumentName)
+
 		if (!documentIsRegistered(cleanedDocumentName)) {
 			registerDocument(cleanedDocumentName)
 		}

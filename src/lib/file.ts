@@ -17,14 +17,11 @@ export const detectHeroIcons = async (): Promise<string | null> => {
   if (!location) {
     const nodeConfigurationOption: string | null | undefined = getConfigurationValue(ConfigurationOption.nodeModulesPath)
 
-    console.log('nodeConfigurationOption', nodeConfigurationOption)
-
     if (nodeConfigurationOption) {
       const topLevelDirs: ReadonlyArray<vscode.WorkspaceFolder> | undefined = vscode.workspace.workspaceFolders
 
       if (topLevelDirs) {
         const topLevelDir: string = topLevelDirs[0].uri.fsPath // rootPath is deprecated
-        console.log(topLevelDirs)
   
         const customNodeLocation: string = join(topLevelDir, nodeConfigurationOption)
 
@@ -41,7 +38,6 @@ export const detectHeroIcons = async (): Promise<string | null> => {
             } else vscode.window.showErrorMessage('Could not find specified node_modules. Specified path: ' + customNodeLocation)
           }
         } else {
-          console.log('does not exist')
           vscode.window.showErrorMessage('Could not find specified node_modules. Specified path: ' + customNodeLocation)
         }
       }
@@ -59,7 +55,6 @@ const findNodeModules = async (): Promise<string[]> => {
 
     if (topLevelFolders.length > 0) {
       topLevelFolders.forEach(folder => {
-        console.log(folder.uri.fsPath)
         const dirs: string[] = readdirSync(folder.uri.fsPath)
 
         // Search Top Level Direcotry for node_modules
@@ -83,12 +78,10 @@ const findNodeModules = async (): Promise<string[]> => {
 }
 
 const searchDirForNodeModules = (dirPath: string): boolean => {
-  console.log('Searching Dir:', dirPath)
   return readdirSync(dirPath).filter(dir => dir === 'node_modules').length > 0
 }
 
 const searchDirForHeroicons = (dirPath: string): boolean => {
-  console.log('Searching Dir for Heroicons:', dirPath)
   return readdirSync(dirPath).filter(dir => dir === '@heroicons').length > 0
 }
 
