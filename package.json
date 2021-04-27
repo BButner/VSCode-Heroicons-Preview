@@ -28,6 +28,11 @@
           "default": "white",
           "description": "Color to render your Icons. Accepts anything that a \"fill\" attribute would accept in HTML."
         },
+        "hip.iconSize": {
+          "type": "string",
+          "default": "1em",
+          "description": "Size of the inline icon based on the SVG \"viewBox\" attribute. Default is 1em."
+        },
         "hip.nodeModulesPath": {
           "type": "string",
           "default": null,

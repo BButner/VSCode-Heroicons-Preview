@@ -105,8 +105,8 @@ export class IconHandler {
   private getSVGString = (iconStyle: IconStyleType): string => {
     const color: string = getConfigurationValue(ConfigurationOption.iconColor)! // Force string because it will return the custom value, OR the default value
 
-    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ' + (iconStyle === IconStyleType.solid ?
-      `fill="${color}"`.replace('#', '%23') : `fill="none" stroke="${color}"`.replace('#', '%23')) // TODO Configuration options for Fill and Stroke colors
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" transform-origin="0 0 12 12" ` + (iconStyle === IconStyleType.solid ?
+      `fill="${color}"`.replace('#', '%23') : `fill="none" stroke="${color}"`.replace('#', '%23'))
       + '>'
   }
 

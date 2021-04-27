@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 
 export enum ConfigurationOption {
   iconColor = 'iconColor',
+  iconSize = 'iconSize',
   nodeModulesPath = 'nodeModulesPath'
 }
 

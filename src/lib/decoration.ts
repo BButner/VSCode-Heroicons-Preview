@@ -1,11 +1,13 @@
 import * as vscode from 'vscode'
+import { ConfigurationOption, getConfigurationValue } from './configuration'
 import { detectIconStyle } from './detection'
 import { IconHandler } from './icon'
 
 const defaultDecorationType: vscode.TextEditorDecorationType = vscode.window.createTextEditorDecorationType({
+  rangeBehavior: vscode.DecorationRangeBehavior.ClosedOpen,
   before: {
-    height: '0.8rem',
-    width: '0.8rem'
+    height: getConfigurationValue(ConfigurationOption.iconSize)!,
+    width: getConfigurationValue(ConfigurationOption.iconSize)!
   }
 })
 

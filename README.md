@@ -25,4 +25,4 @@ For instance, lets say Heroicons v1.2 adds a "CuteCatIcon". If you open up a pro
 - [x] React and Vue library support
 - [x] Configuration options for per-project `node_modules` location in the event HIP cannot detect the `node_modules` directory location
 - [x] Configure Icon color
-- [ ] Configure Icon size
+- [x] Configure Icon size
