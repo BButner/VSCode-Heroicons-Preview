@@ -30,7 +30,7 @@ For instance, lets say Heroicons v1.2 adds a "CuteCatIcon". If you open up a pro
 ## ⚙ Settings
 - `hip.iconColor`: Color to render your Icons. Accepts anything that a \"fill\" attribute would accept in HTML.
 - `hip.iconSize`: Size of the inline icon. Default is 1em.
-- `hip.nodeModulesPath`: Specify a per-workspace node_modules path, relative to the top level directory. ex: \"/projecta/frontend/node_modules\"
-- `hip.fileDecorationExtensions`: Array of file extensions to search for Icons to decorate. Example: `[\".tsx\", \".jsx\"]`
+- `hip.nodeModulesPath`: Specify a per-workspace node_modules path, relative to the top level directory. ex: `/project/frontend/node_modules`
+- `hip.fileDecorationExtensions`: Array of file extensions to search for Icons to decorate. Example: `[".tsx", ".jsx"]`
 
 ###### ⚠ Please note this is in its early stages, and I expect there to be issues. If you come across any, please feel free to [open an issue on the GitHub repo](https://github.com/BButner/VSCode-Heroicons-Preview/issues).
