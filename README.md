@@ -4,7 +4,7 @@ Previews for Heroicons right alongside their definition, inline in your code!
 
 ## 👋 Introduction
 
-This project aims to recreate the [VSCode MaterialDesignIcons Intellisense](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense) by [@lukas-tr](https://github.com/lukas-tr). I personally use the aforementioned library when I'm working with Material Design Icons in my projects. I recently started using Heroicons, and couldn't find a similar extension in existence. VSCode Heroicons Preview is not as feature-rich as MDI Intellisense, however there are more planned features in the future!
+This project aims to recreate the [VSCode MaterialDesignIcons Intellisense](https://github.com/lukas-tr/vscode-materialdesignicons-intellisense) by [@lukas-tr](https://github.com/lukas-tr) for Heroicons. I personally use the aforementioned library when I'm working with Material Design Icons in my projects. I recently started using [Heroicons](https://heroicons.com/), and couldn't find a similar extension in existence. VSCode Heroicons Preview is not as feature-rich as MDI Intellisense, however there are more planned in the future!
 
 ## 🧠 How does it work?
 The library will attempt to detect your `node_modules` folder and parse the data from the icons on an ad-hoc basis, then cache that data to lower the amount of disk reads during that session. This allows the extension to be independent of Heroicons updates, and prevent potential confusion.
@@ -18,11 +18,19 @@ For instance, lets say Heroicons v1.2 adds a "CuteCatIcon". If you open up a pro
 ![Typing Preview](/img/typing_preview.gif)
 
 ## 🎨 Features
-- [x] Inline Icon Previews
-- [ ] Configure which files should render icons
-- [x] Solid/Outline detection, with default fallback
+- Inline Icon Previews
+- Configure which files should render icons
+- Solid/Outline detection, with default fallback
   - For instance, if you have `import { ChevronUpIcon } from '@heroicons/react/solid'` it will render the Solid variant, else it will render whatever the fallback style is. (Default: Outline)
-- [x] React and Vue library support
-- [x] Configuration options for per-project `node_modules` location in the event HIP cannot detect the `node_modules` directory location
-- [x] Configure Icon color
-- [x] Configure Icon size
+- React and Vue library support
+- Configuration options for per-project `node_modules` location in the event HIP cannot detect the `node_modules` directory location
+- Configure Icon color
+- Configure Icon size
+
+## ⚙ Settings
+- `hip.iconColor`: Color to render your Icons. Accepts anything that a \"fill\" attribute would accept in HTML.
+- `hip.iconSize`: Size of the inline icon. Default is 1em.
+- `hip.nodeModulesPath`: Specify a per-workspace node_modules path, relative to the top level directory. ex: \"/projecta/frontend/node_modules\"
+- `hip.fileDecorationExtensions`: Array of file extensions to search for Icons to decorate. Example: `[\".tsx\", \".jsx\"]`
+
+###### ⚠ Please note this is in its early stages, and I expect there to be issues. If you come across any, please feel free to [open an issue on the GitHub repo](https://github.com/BButner/VSCode-Heroicons-Preview/issues).

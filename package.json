@@ -3,6 +3,11 @@
   "displayName": "heroicons-preview",
   "description": "Inline SVG previews for Heroicons",
   "version": "0.0.1",
+  "publisher": "BButner",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BButner/VSCode-Heroicons-Preview.git"
+  },
   "engines": {
     "vscode": "^1.55.0"
   },
@@ -31,7 +36,7 @@
         "hip.iconSize": {
           "type": "string",
           "default": "1em",
-          "description": "Size of the inline icon based on the SVG \"viewBox\" attribute. Default is 1em."
+          "description": "Size of the inline icon. Default is 1em."
         },
         "hip.nodeModulesPath": {
           "type": "string",
