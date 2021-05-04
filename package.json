@@ -2,13 +2,14 @@
   "name": "heroicons-preview",
   "displayName": "VSCode Heroicons Preview",
   "description": "Inline SVG previews for Heroicons",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "BButner",
   "homepage": "https://github.com/BButner/VSCode-Heroicons-Preview",
   "repository": {
     "type": "git",
     "url": "https://github.com/BButner/VSCode-Heroicons-Preview.git"
   },
+  "icon": "img/icon.png",
   "engines": {
     "vscode": "^1.55.0"
   },
