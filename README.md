@@ -1,6 +1,9 @@
-# VSCode Heroicons Preview
+<p align="center">
+<img src="img/icon.png" alt="VSCode Heroicons Logo">
+</p>
 
-Previews for Heroicons right alongside their definition, inline in your code!
+<h1 align="center">VSCode Heroicons Preview</h1>
+<h3 align="center">Previews for Heroicons right alongside their definition, inline in your code.</h3>
 
 ## 👋 Introduction
 

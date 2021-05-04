@@ -77,7 +77,7 @@ export class Decorator {
 
             this.iconHandler.getIconNames().some(
               (icon) => {
-                if (words.filter(word => word.includes(icon)).length > 0) {
+                if (words.filter(word => new RegExp(`(?<![a-zA-Z])${icon}`, 'gm').test(word)).length > 0) {
                   foundIcons.push(icon)
                 }
               }
