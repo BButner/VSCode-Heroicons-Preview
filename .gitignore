@@ -9,3 +9,4 @@ package-lock.json
 .vscode
 .vscodeignore
 CHANGELOG.md
+.DS_store

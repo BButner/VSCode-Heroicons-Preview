@@ -2,7 +2,7 @@
   "name": "heroicons-preview",
   "displayName": "VSCode Heroicons Preview",
   "description": "Inline SVG previews for Heroicons",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "publisher": "BButner",
   "homepage": "https://github.com/BButner/VSCode-Heroicons-Preview",
   "repository": {
@@ -41,13 +41,22 @@
         },
         "hip.fileDecorationExtensions": {
           "type": "array",
-          "default": [".tsx", ".jsx", ".vue", ".html", ".svelte"],
+          "default": [
+            ".tsx",
+            ".jsx",
+            ".vue",
+            ".html",
+            ".svelte"
+          ],
           "description": "Array of file extensions to search for Icons to decorate. Example: [\".tsx\", \".jsx\"]"
         },
         "hip.iconStyleFallback": {
           "type": "string",
           "default": "outline",
-          "enum": ["solid", "outline"],
+          "enum": [
+            "solid",
+            "outline"
+          ],
           "description": "If HIP cannot detect a style from an import, it will fall back to this style."
         }
       }
@@ -78,6 +87,6 @@
     "typescript": "^4.1.3",
     "vscode-test": "^1.5.0",
     "webpack": "^5.19.0",
-    "webpack-cli": "^4.4.0"
+    "webpack-cli": "^4.10.0"
   }
 }

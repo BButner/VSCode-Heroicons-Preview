@@ -74,7 +74,9 @@ export class IconHandler {
   }
 
   private getIconPath = (iconStyle: string): string => {
-    return join(this.heroIconsLocation + '/' + this.mode + '/' + iconStyle)
+    const isV2 = readdirSync(join(this.heroIconsLocation, this.mode!)).filter((dir: string) => dir === '24').length > 0
+
+    return isV2 ? join(this.heroIconsLocation, this.mode!, '24', iconStyle) : join(this.heroIconsLocation, this.mode!, iconStyle)
   }
 
   private isIconCached = (iconName: string, iconStyle: IconStyleType): boolean => {

@@ -25,8 +25,9 @@ export const registerDocument = (documentName: string): void => {
   })
 }
 
-export const getDocumentDecorationTypeByName = (documentName: string): vscode.TextEditorDecorationType => {
-  return documentDecorationTypes.filter(type => type.documentName === documentName)[0].decorationType
+export const getDocumentDecorationTypeByName = (documentName: string): vscode.TextEditorDecorationType | null => {
+  const decoration = documentDecorationTypes.find(type => type.documentName === documentName)
+  return decoration ? decoration.decorationType : null
 }
 
 interface DocumentDecorationType {
@@ -42,21 +43,22 @@ export class Decorator {
   }
 
   clearEditorDecorations = (documentName: string): void => {
-    const visibleEditors: vscode.TextEditor[] = vscode.window.visibleTextEditors
+    const visibleEditors: readonly vscode.TextEditor[] = vscode.window.visibleTextEditors
     const potentialEditor: vscode.TextEditor[] = visibleEditors.filter(editor => editor.document.fileName === documentName)
 
     if (visibleEditors.length > 0 && potentialEditor.length > 0) {
       const editor: vscode.TextEditor = potentialEditor[0]
 
-      editor.setDecorations(
-        getDocumentDecorationTypeByName(editor.document.fileName),
-        []
-      )
+      const decoration = getDocumentDecorationTypeByName(editor.document.fileName)
+
+      if (decoration) {
+        editor.setDecorations(decoration, [])
+      }
     }
   }
 
   decorateEditor = (documentName: string): void => {
-    const visibleEditors: vscode.TextEditor[] = vscode.window.visibleTextEditors
+    const visibleEditors: readonly vscode.TextEditor[] = vscode.window.visibleTextEditors
     const potentialEditor: vscode.TextEditor[] = visibleEditors.filter(editor => editor.document.fileName === documentName)
 
     let decorationsArray: any[] = []
@@ -111,10 +113,13 @@ export class Decorator {
           }
         }
 
-        editor.setDecorations(
-          getDocumentDecorationTypeByName(editor.document.fileName),
-          decorationsArray
-        )
+        const decoration = getDocumentDecorationTypeByName(editor.document.fileName)
+
+        console.log('decoration', editor.document.fileName, decoration)
+
+        if (decoration) {
+          editor.setDecorations(decoration, decorationsArray)
+        }
       }
     }
   }

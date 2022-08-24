@@ -41,7 +41,7 @@ export class Events {
 	}
 
 	private configChanged = () => {
-		const editors: vscode.TextEditor[] = vscode.window.visibleTextEditors
+		const editors = vscode.window.visibleTextEditors
 
 		editors.forEach(editor => {
 			if (editor.document && editor.document.getText()) {
